@@ -1,0 +1,137 @@
+
+/* 
+     cet algo admet un seule parametre : 
+     -1- tab : un vecteur, eventuellement non vide, de type INTEGER     
+     ROLE : cet algorithme a le role de trier, dans l'ordre croissant, 
+            un tableau d'entiers relatifs ( ensemble Z).
+            le type de l'algorithme appliqué est "le tri par insertion"
+     PRINCIPE DE L'ALGO:
+            - le tableau doit avoir au minimum deux (02) elements
+            - en fait le parcours de tout le vecteur et ce a partir du deuxieme cellule ( tab[1] )
+            - pour chaque celleule on compare sont contenue par rapport au contenu du cellule precedent 
+            - si le precedent est plus grand que lui alors on cherche sa nouvelle place entre ces prédécesseurs  
+              en decalant à droite d'une position tous les elements qui sont plus grand              
+*/
+
+/******************************************************************************************  
+  **********  une premiere methode : methode compacte  *******
+  ******************************************************************************************/
+
+ALGORITHME insertionSort( tab : ARRAY_OF INTEGER )
+VAR
+   long_vect : INTEGER ; // la longueur du vecteur
+   i , j , k : INTEGER ; // indice de parcours des boucles
+   
+BEGIN
+   
+   long_vect := tab.length  ;  
+ 
+   IF ( long_vect >= 2 ) THEN
+
+         FOR j FROM 1 TO long_vect-1 DO // boucle sur le vecteur 
+
+            k := tab [j] ;
+
+            FOR i FROM j-1 To 0 STEP -1 DO // boucle sur les precedents 
+
+               IF ( tab[ i ] <= k )  THEN
+
+                  break ;
+
+               ELSE
+
+                  tab [ i + 1 ] := tab [ i ] ; //decalage à droite
+
+               END_IF 
+
+            END_FOR
+
+            tab [ i + 1 ] := k ; // la place adéquoite de l'element en cours de la boucle principale
+
+         END_FOR
+   END_IF
+
+END 
+
+ /******************************************************************************************  
+  **********  une deuxieme methode qui fait appel a une procedure et a une fonction  *******
+  ******************************************************************************************/
+
+ALGORITHME insertionSort( tab : ARRAY_OF INTEGER )
+VAR
+   long_vect : INTEGER ; // la longueur du vecteur
+   i , j , k : INTEGER ; // indice de parcours des boucles
+   save_val  : INTEGER ;
+   
+BEGIN
+     
+   long_vect := tab.length  ;  
+ 
+   IF ( long_vect >= 2 ) THEN
+
+         FOR j FROM 1 TO long_vect-1 DO // boucle sur le vecteur 
+
+            IF ( tab[ j-1 ] > tab [ j ] )  THEN   
+
+               save_val := tab[j] ;
+
+               // chercher l'index d'insertion 
+               index_ins = chercher_index_insertion ( tab         , 
+                                                      save_val    ,                                                  
+                                                      j-1       ) ;
+
+               //decalage a droite de tous les elements qui lui sont supérieur
+               decalage_vecteur ( tab  ,  index_ins , j);
+               
+               //inserer la valeur actuelle dans le rang correcte
+               tab[ index_ins  ]  :=  save_val ;                                                        
+
+            END_IF 
+
+         END_FOR
+   END_IF
+   
+END 
+
+/************** chercher l'index d'insertion d'une valeur dans le vecteur ****/
+FUNCTION chercher_index_insertion (  tab        : ARRAY_OF INTEGER  , 
+                                     save_val   : INTEGER           ,
+                                     indice_fin : INTEGER           ) : INTEGER    
+
+VAR
+   i : INTEGER ;
+BEGIN
+
+     IF ( val_a_inserer <= tab[0] )
+        return ( 0 ) ;
+     ELSE
+
+        FOR i FROM 1 TO indice_fin   DO
+           IF ( val_a_inserer >= tab[i] AND  val_a_inserer <= tab[i+1]   ) THEN
+              return ( i+1 ) ;
+           END_IF
+        END_FOR
+
+     END_IF
+    
+END 
+
+/************ decalage, d'une position a droite, des elements   ********/
+
+PROCEDURE  decalage_vecteur ( tab         : ARRAY_OF INTEGER , 
+                              debut_index : INTEGER          ,
+                              fin_index   : INTEGER          )  : INTEGER
+VAR
+  
+  i : INTEGER ;
+
+BEGIN    
+
+        FOR i FROM fin_index TO debut_index+1  STEP -1  DO
+           tab[ i ] :=  tab[ i-1 ] ;
+        END_FOR
+
+     END_IF
+
+END 
+
